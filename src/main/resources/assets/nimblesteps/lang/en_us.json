@@ -1,5 +1,22 @@
 {
-  "itemGroup.nimblesteps": "Example Mod Tab",
-  "block.nimblesteps.example_block": "Example Block",
-  "item.nimblesteps.example_item": "Example Item"
+  "key.categories.nimblesteps": "Nimble Steps",
+  "key.nimblesteps.roll_slide": "Roll/Slide",
+  "nimblesteps.configuration.locomotion_settings": "Locomotion Settings",
+  "nimblesteps.configuration.locomotion_settings.tooltip": "Locomotion settings let you change all options related to movement on the ground.",
+  "nimblesteps.configuration.locomotion_settings.enable_omni_sprint": "Enable Omnidirectional Sprinting",
+  "nimblesteps.configuration.locomotion_settings.enable_omni_sprint.tooltip": "Enable omnidirectional sprinting (default: true)",
+  "nimblesteps.configuration.locomotion_settings.enable_crawl": "Enable Crawl",
+  "nimblesteps.configuration.locomotion_settings.enable_crawl.tooltip": "Enable crawl (default: true)",
+  "nimblesteps.configuration.locomotion_settings.walk_speed_multiplier": "Walking Speed Multiplier",
+  "nimblesteps.configuration.locomotion_settings.walk_speed_multiplier.tooltip": "Walking speed multiplier (default: 1.3 = 30% increase)",
+  "nimblesteps.configuration.locomotion_settings.sprint_speed_multiplier": "Sprinting Speed Multiplier",
+  "nimblesteps.configuration.locomotion_settings.sprint_speed_multiplier.tooltip": "Sprinting speed multiplier (default: 1.3 = 30% increase)",
+  "nimblesteps.configuration.locomotion_settings.walk_step_height": "Walking Step Height",
+  "nimblesteps.configuration.locomotion_settings.walk_step_height.tooltip": "Walking step height in blocks (default: 0.6, vanilla: 0.6)",
+  "nimblesteps.configuration.locomotion_settings.sprint_step_height": "Sprinting Step Height",
+  "nimblesteps.configuration.locomotion_settings.sprint_step_height.tooltip": "Sprinting step height in blocks (default: 1.0, vanilla: 0.6)",
+  "nimblesteps.configuration.swimming_settings": "Swimming Settings",
+  "nimblesteps.configuration.swimming_settings.tooltip": "Swimming settings let you change all options related to movement on the water.",
+  "nimblesteps.configuration.swimming_settings.enable_shallow_swimming": "Enable Shallow Swimming",
+  "nimblesteps.configuration.swimming_settings.enable_shallow_swimming.tooltip": "Enables swimming while sprinting through water (default: true)"
 }

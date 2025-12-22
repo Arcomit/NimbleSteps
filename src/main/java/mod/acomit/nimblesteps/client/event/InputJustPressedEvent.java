@@ -1,8 +1,7 @@
-package mod.acomit.nimblesteps.event;
+package mod.acomit.nimblesteps.client.event;
 
 import lombok.Getter;
 import mod.acomit.nimblesteps.client.NsKeyMapping;
-import net.minecraft.network.chat.ClickEvent;
 import net.neoforged.bus.api.Event;
 
 /**
@@ -12,7 +11,7 @@ import net.neoforged.bus.api.Event;
  */
 public class InputJustPressedEvent extends Event {
     @Getter private final NsKeyMapping keyMapping;
-ClickEvent
+
     public InputJustPressedEvent(NsKeyMapping keyMapping) {
         this.keyMapping = keyMapping;
     }

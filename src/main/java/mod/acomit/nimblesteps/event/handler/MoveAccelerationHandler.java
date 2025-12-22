@@ -1,6 +1,6 @@
-package mod.acomit.nimblesteps.event;
+package mod.acomit.nimblesteps.event.handler;
 
-import mod.acomit.nimblesteps.CommonConfig;
+import mod.acomit.nimblesteps.ServerConfig;
 import mod.acomit.nimblesteps.NimbleStepsMod;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -22,7 +22,7 @@ public class MoveAccelerationHandler {
     private static final ResourceLocation SPRINT_SPEED_MULTIPLIER_MODIFIER_ID = NimbleStepsMod.prefix("sprint_speed_multiplier");
 
     @SubscribeEvent
-    public static void tickPlayer(PlayerTickEvent.Pre event) {
+    public static void onPlayerTick(PlayerTickEvent.Pre event) {
         Player player = event.getEntity();
         AttributeInstance movementSpeed = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (movementSpeed == null) {
@@ -33,7 +33,7 @@ public class MoveAccelerationHandler {
         movementSpeed.removeModifier(SPRINT_SPEED_MULTIPLIER_MODIFIER_ID);
 
         if (player.isSprinting()) {
-            double sprintBonus = CommonConfig.sprintSpeedMultiplier - 1.0;
+            double sprintBonus = ServerConfig.sprintSpeedMultiplier - 1.0;
             AttributeModifier sprintModifier = new AttributeModifier(
                     SPRINT_SPEED_MULTIPLIER_MODIFIER_ID,
                     sprintBonus,
@@ -41,7 +41,7 @@ public class MoveAccelerationHandler {
             );
             movementSpeed.addTransientModifier(sprintModifier);
         } else {
-            double walkBonus = CommonConfig.walkSpeedMultiplier - 1.0;
+            double walkBonus = ServerConfig.walkSpeedMultiplier - 1.0;
             AttributeModifier walkModifier = new AttributeModifier(
                     WALK_SPEED_MULTIPLIER_MODIFIER_ID,
                     walkBonus,

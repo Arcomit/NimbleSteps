@@ -1,6 +1,6 @@
-package mod.acomit.nimblesteps.event;
+package mod.acomit.nimblesteps.event.handler;
 
-import mod.acomit.nimblesteps.CommonConfig;
+import mod.acomit.nimblesteps.ServerConfig;
 import mod.acomit.nimblesteps.NimbleStepsMod;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -33,7 +33,7 @@ public class StepAssistHandler {
         movementSpeed.removeModifier(SPRINT_STEP_HEIGHT_MODIFIER_ID);
 
         if (player.isSprinting()) {
-            double sprintBonus = CommonConfig.sprinStepHeight - 0.6;
+            double sprintBonus = ServerConfig.sprinStepHeight - 0.6;
             AttributeModifier sprintModifier = new AttributeModifier(
                     SPRINT_STEP_HEIGHT_MODIFIER_ID,
                     sprintBonus,
@@ -41,7 +41,7 @@ public class StepAssistHandler {
             );
             movementSpeed.addTransientModifier(sprintModifier);
         } else {
-            double walkBonus = CommonConfig.walkStepHeight - 0.6;
+            double walkBonus = ServerConfig.walkStepHeight - 0.6;
             AttributeModifier walkModifier = new AttributeModifier(
                     WALK_STEP_HEIGHT_MODIFIER_ID,
                     walkBonus,

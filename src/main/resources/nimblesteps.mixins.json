@@ -4,8 +4,12 @@
   "package": "mod.acomit.nimblesteps.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "PlayerMixin",
+    "LivingEntityMixin2"
   ],
   "client": [
+    "InputMixin",
+    "LocalPlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

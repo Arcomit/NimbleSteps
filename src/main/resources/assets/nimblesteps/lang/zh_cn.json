@@ -1,5 +1,22 @@
 {
-  "key.categories.nimblesteps": "灵动步伐",
-  "key.nimblesteps.roll": "翻滚/滑铲"
+  "key.categories.nimblesteps": "敏捷步伐",
+  "key.nimblesteps.roll_slide": "翻滚/滑铲",
+  "nimblesteps.configuration.locomotion_settings": "地面移动设置",
+  "nimblesteps.configuration.locomotion_settings.tooltip": "该设置允许你更改所有与地面移动相关选项。",
+  "nimblesteps.configuration.locomotion_settings.enable_omni_sprint": "全向疾跑",
+  "nimblesteps.configuration.locomotion_settings.enable_omni_sprint.tooltip": "启用全向疾跑 (默认: true)",
+  "nimblesteps.configuration.locomotion_settings.enable_crawl": "爬行",
+  "nimblesteps.configuration.locomotion_settings.enable_crawl.tooltip": "启用爬行 (默认: true)",
+  "nimblesteps.configuration.locomotion_settings.walk_speed_multiplier": "行走速度系数",
+  "nimblesteps.configuration.locomotion_settings.walk_speed_multiplier.tooltip": "行走速度系数 (默认: 1.3 = 增加 30%)",
+  "nimblesteps.configuration.locomotion_settings.sprint_speed_multiplier": "疾跑速度系数",
+  "nimblesteps.configuration.locomotion_settings.sprint_speed_multiplier.tooltip": "疾跑速度系数 (默认: 1.3 = 增加 30%)",
+  "nimblesteps.configuration.locomotion_settings.walk_step_height": "行走步高",
+  "nimblesteps.configuration.locomotion_settings.walk_step_height.tooltip": "行走时的步高，单位为方块 (默认: 0.6, 原版: 0.6)",
+  "nimblesteps.configuration.locomotion_settings.sprint_step_height": "疾跑步高",
+  "nimblesteps.configuration.locomotion_settings.sprint_step_height.tooltip": "疾跑时的步高，单位为方块 (默认: 1.0, 原版: 0.6)",
+  "nimblesteps.configuration.swimming_settings": "游泳移动设置",
+  "nimblesteps.configuration.swimming_settings.tooltip": "该设置允许你更改所有与游泳相关选项。",
+  "nimblesteps.configuration.swimming_settings.enable_shallow_swimming": "浅水游泳",
+  "nimblesteps.configuration.swimming_settings.enable_shallow_swimming.tooltip": "启用在水中疾跑时进入游泳状态 (默认: true)"
 }
-

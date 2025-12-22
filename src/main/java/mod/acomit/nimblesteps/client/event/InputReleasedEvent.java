@@ -1,4 +1,4 @@
-package mod.acomit.nimblesteps.event;
+package mod.acomit.nimblesteps.client.event;
 
 import lombok.Getter;
 import mod.acomit.nimblesteps.client.NsKeyMapping;

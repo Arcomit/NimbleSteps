@@ -13,6 +13,8 @@ import mod.acomit.nimblesteps.network.UpdateCrawlStatePacket;
 import mod.acomit.nimblesteps.network.UseSlideOrEvadePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -28,10 +30,10 @@ import net.neoforged.neoforge.network.PacketDistributor;
 /**
  * Author: Arcomit
  * CreateTime: 2025-12-20
- * Description: 爬行/翻滚/滑铲
+ * Description: 翻滚/滑铲/爬行
  */
 @EventBusSubscriber(modid = NimbleStepsMod.MODID)
-public class CrawlRollSlideHandler {
+public class RollSlideCrawlHandler {
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
@@ -42,9 +44,7 @@ public class CrawlRollSlideHandler {
         if (key == NsKeyBindings.ROLL_KEY) {
             NimbleStepsState nimbleStepsState = player.getData(NsAttachmentTypes.CRAWL_ATTACHMENT);
 
-            // Landing Roll Logic
             if (!player.onGround() && player.fallDistance > 3.0f) {
-                // TODO: 翻滚动画
                 nimbleStepsState.setLandingRollWindow(10); // 0.5s window (10 ticks)
                 PacketDistributor.sendToServer(new SetLandingRollWindowPacket(10));
                 return;
@@ -84,47 +84,19 @@ public class CrawlRollSlideHandler {
     }
 
     @SubscribeEvent
-    public static void tickPlayer(PlayerTickEvent.Pre event) {
-        // 检查玩家是否仍然可以保持爬行状态
-        Player player = event.getEntity();
-        NimbleStepsState nimbleStepsState = player.getData(NsAttachmentTypes.CRAWL_ATTACHMENT);
-        if (nimbleStepsState.isCrawling()) {
-            if (!canCrawl(player)) {
-                nimbleStepsState.setCrawling(false);
-                player.setForcedPose(null);
-                player.setData(NsAttachmentTypes.CRAWL_ATTACHMENT, nimbleStepsState);
-            }
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public static void tickPlayerClient(PlayerTickEvent.Pre event) {
-        // 客户端检查玩家是否仍然可以保持滑铲状态
-        Player player = event.getEntity();
-        if (player.level().isClientSide()) {
+    public static void onLivingFall(LivingFallEvent event) {
+        if (event.getEntity() instanceof Player player) {
             NimbleStepsState nimbleStepsState = player.getData(NsAttachmentTypes.CRAWL_ATTACHMENT);
-            int slideDuration = nimbleStepsState.getSlideDuration();
-            if (slideDuration > 0) {
-                if (player.getDeltaMovement().length() < 0.1) {
-                    nimbleStepsState.setSlideDuration(0);
-                    player.setForcedPose(null);
-                    PacketDistributor.sendToServer(new CancelSlidePacket());
+            if (nimbleStepsState.getLandingRollWindow() > 0) {
+                event.setDamageMultiplier(0);
+                event.setCanceled(true); // Cancel fall damage
+                // TODO: 翻滚动画
+                // Trigger roll animation/logic here if needed
+                // For example, force a slide or roll
+                if (!player.level().isClientSide) {
+                    // TODO: 音效
+                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 40, 0));
                 }
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public static void tickPlayerServer(PlayerTickEvent.Pre event) {
-        // 双端处理滑铲状态自然结束
-        Player player = event.getEntity();
-        NimbleStepsState nimbleStepsState = player.getData(NsAttachmentTypes.CRAWL_ATTACHMENT);
-        int slideDuration = nimbleStepsState.getSlideDuration();
-        if (slideDuration > 0) {
-            nimbleStepsState.setSlideDuration(slideDuration - 1);
-            if (slideDuration - 1 == 0) {
-                player.setForcedPose(null);
             }
         }
     }
@@ -181,7 +153,7 @@ public class CrawlRollSlideHandler {
         double x = leftImpulse * cos - forward * sin;
         double z = forward * cos + leftImpulse * sin;
 
-        if (!player.onGround()) {
+        if (!player.onGround() && ServerConfig.enableTapStrafing) {
             player.yRotO = player.getYRot();
             double targetYRot = Math.toDegrees(Math.atan2(-x, z));
             player.setYRot((float) targetYRot);
@@ -192,6 +164,57 @@ public class CrawlRollSlideHandler {
         player.setDeltaMovement(
                 player.getDeltaMovement().add(motion)
         );
+    }
+
+    @SubscribeEvent
+    public static void canKeepCrawling(PlayerTickEvent.Pre event) {
+        // 检查玩家是否仍然可以保持爬行状态
+        Player player = event.getEntity();
+        NimbleStepsState nimbleStepsState = player.getData(NsAttachmentTypes.CRAWL_ATTACHMENT);
+        if (nimbleStepsState.isCrawling()) {
+            if (!canCrawl(player)) {
+                nimbleStepsState.setCrawling(false);
+                player.setForcedPose(null);
+                player.setData(NsAttachmentTypes.CRAWL_ATTACHMENT, nimbleStepsState);
+            }
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void canKeepSliding(PlayerTickEvent.Pre event) {
+        // 客户端检查玩家是否仍然可以保持滑铲状态
+        Player player = event.getEntity();
+        if (player.level().isClientSide()) {
+            NimbleStepsState nimbleStepsState = player.getData(NsAttachmentTypes.CRAWL_ATTACHMENT);
+            int slideDuration = nimbleStepsState.getSlideDuration();
+            if (slideDuration > 0) {
+                if (player.getDeltaMovement().length() < 0.1) {
+                    nimbleStepsState.setSlideDuration(0);
+                    player.setForcedPose(null);
+                    PacketDistributor.sendToServer(new CancelSlidePacket());
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTick(PlayerTickEvent.Pre event) {
+        // 双端处理滑铲状态自然结束
+        Player player = event.getEntity();
+        NimbleStepsState nimbleStepsState = player.getData(NsAttachmentTypes.CRAWL_ATTACHMENT);
+        int slideDuration = nimbleStepsState.getSlideDuration();
+        if (slideDuration > 0) {
+            nimbleStepsState.setSlideDuration(slideDuration - 1);
+            if (slideDuration - 1 == 0) {
+                player.setForcedPose(null);
+            }
+        }
+        // 处理着陆翻滚窗口时间
+        int landingRollWindow = nimbleStepsState.getLandingRollWindow();
+        if (landingRollWindow > 0) {
+            nimbleStepsState.setLandingRollWindow(landingRollWindow - 1);
+        }
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -212,27 +235,6 @@ public class CrawlRollSlideHandler {
         int slideAndEvadeCooldown = nimbleStepsState.getSlideAndEvadeCooldown();
         if (slideAndEvadeCooldown > 0) {
             nimbleStepsState.setSlideAndEvadeCooldown(slideAndEvadeCooldown - 1);
-        }
-
-        int landingRollWindow = nimbleStepsState.getLandingRollWindow();
-        if (landingRollWindow > 0) {
-            nimbleStepsState.setLandingRollWindow(landingRollWindow - 1);
-        }
-    }
-
-    @SubscribeEvent
-    public static void onLivingFall(LivingFallEvent event) {
-        if (event.getEntity() instanceof Player player) {
-            NimbleStepsState nimbleStepsState = player.getData(NsAttachmentTypes.CRAWL_ATTACHMENT);
-            if (nimbleStepsState.getLandingRollWindow() > 0) {
-                event.setDamageMultiplier(0);
-                event.setCanceled(true); // Cancel fall damage
-                // Trigger roll animation/logic here if needed
-                // For example, force a slide or roll
-                if (!player.level().isClientSide) {
-                     // Maybe apply a forward boost or just play sound
-                }
-            }
         }
     }
 

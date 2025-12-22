@@ -1,0 +1,28 @@
+package mod.acomit.nimblesteps.client;
+
+import com.mojang.blaze3d.platform.InputConstants;
+import mod.acomit.nimblesteps.NimbleStepsMod;
+import net.minecraft.client.KeyMapping;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import org.lwjgl.glfw.GLFW;
+
+@EventBusSubscriber(modid = NimbleStepsMod.MODID, value = Dist.CLIENT)
+public class KeyBindings {
+    public static final String CATEGORY = "key.categories." + NimbleStepsMod.MODID;
+
+    public static final KeyMapping ROLL_KEY = new KeyMapping(
+            "key." + NimbleStepsMod.MODID + ".roll_slide",
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_V,
+            CATEGORY
+    );
+
+    @SubscribeEvent
+    public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
+        event.register(ROLL_KEY);
+    }
+}
+

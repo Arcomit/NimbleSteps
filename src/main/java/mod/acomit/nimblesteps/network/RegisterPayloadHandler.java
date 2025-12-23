@@ -42,5 +42,10 @@ public class RegisterPayloadHandler {
                 SetLandingRollWindowPacket.STREAM_CODEC,
                 SetLandingRollWindowPacket::handle
         );
+        registrar.playToServer(
+                UseFreestyleJumpPacket.TYPE,
+                UseFreestyleJumpPacket.STREAM_CODEC,
+                UseFreestyleJumpPacket::handle
+        );
     }
 }

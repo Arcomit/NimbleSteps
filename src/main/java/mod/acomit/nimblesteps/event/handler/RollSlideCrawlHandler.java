@@ -142,6 +142,7 @@ public class RollSlideCrawlHandler {
         if (forward >= 0) {
             nimbleStepsState.setSlideDuration(10); // Set slide duration (e.g., 10 ticks)
             player.setForcedPose(Pose.SWIMMING);
+            player.resetFallDistance();
             // TODO: 滑铲动画
         }
 
@@ -154,9 +155,20 @@ public class RollSlideCrawlHandler {
         double z = forward * cos + leftImpulse * sin;
 
         if (!player.onGround() && ServerConfig.enableTapStrafing) {
-            player.yRotO = player.getYRot();
             double targetYRot = Math.toDegrees(Math.atan2(-x, z));
+
+            float currentYRot = player.getYRot();
+            double diffYRot = targetYRot - currentYRot;
+            while (diffYRot < -180.0D) {
+                targetYRot += 360.0D;
+                diffYRot = targetYRot - currentYRot;
+            }
+            while (diffYRot >= 180.0D) {
+                targetYRot -= 360.0D;
+                diffYRot = targetYRot - currentYRot;
+            }
             player.setYRot((float) targetYRot);
+            player.yRotO = player.getYRot();
         }
 
         Vec3 motion = new Vec3(x, 0, z).normalize().scale(boost);

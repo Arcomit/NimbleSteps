@@ -9,6 +9,8 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 public class ServerConfig {
     protected static final ModConfigSpec SPEC;
 
+    public static ModConfigSpec.BooleanValue REMOVE_SPEED_LIMITS;
+
     public static ModConfigSpec.BooleanValue ENABLE_OMNI_SPRINT;
     public static ModConfigSpec.BooleanValue ENABLE_CRAWL;
     public static ModConfigSpec.BooleanValue ENABLE_SLIDE_AND_EVADE;
@@ -29,6 +31,19 @@ public class ServerConfig {
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
+        builder
+                .comment("Online settings let you change all options related to multiplayer.")
+                .translation("nimblesteps.configuration.online_settings")
+                .push("online_settings");
+
+        // 移除速度限制
+        REMOVE_SPEED_LIMITS = builder
+                .comment("Remove speed limits imposed by server.\nThis removes most rollbacks but makes it easier to cheat on a server. (default: true)")
+                .translation("nimblesteps.configuration.online_settings.remove_speed_limits")
+                .define("removeSpeedLimits", true);
+
+        builder.pop();
+
         builder
                 .comment("Locomotion settings let you change all options related to movement on the ground.")
                 .translation("nimblesteps.configuration.locomotion_settings")
@@ -128,6 +143,8 @@ public class ServerConfig {
         SPEC = builder.build();
     }
 
+    public static boolean removeSpeedLimits;
+
     public static boolean enableOmniSprint;
     public static boolean enableCrawl;
     public static boolean enableSlideAndEvade;
@@ -150,6 +167,8 @@ public class ServerConfig {
     static void onLoad(final ModConfigEvent event) {
         if (event instanceof ModConfigEvent.Unloading) return;
         if (event.getConfig().getSpec() != SPEC) return;
+        removeSpeedLimits = REMOVE_SPEED_LIMITS.get();
+
         enableOmniSprint = ENABLE_OMNI_SPRINT.get();
         enableCrawl = ENABLE_CRAWL.get();
         enableSlideAndEvade = ENABLE_SLIDE_AND_EVADE.get();

@@ -66,11 +66,15 @@ public class SwimmingBoostHandler {
     public static void applySwimmingBoost(Player player) {
         NimbleStepsState nimbleStepsState = player.getData(NsAttachmentTypes.CRAWL_ATTACHMENT);
         nimbleStepsState.setSwimmingBoostCooldown(ServerConfig.swimmingBoostCooldown);
-        Vec3 lookDirection = player.getLookAngle();
+        Vec3 deltaMovement = player.getDeltaMovement();
+        Vec3 direction;
+        if (deltaMovement.lengthSqr() < 1.0E-7) {
+            direction = player.getLookAngle();
+        } else {
+            direction = deltaMovement.normalize();
+        }
         double boost = 0.4;
-        player.setDeltaMovement(
-                player.getDeltaMovement().add(lookDirection.x * boost, lookDirection.y * boost, lookDirection.z * boost)
-        );
+        player.setDeltaMovement(deltaMovement.add(direction.scale(boost)));
     }
 
     @SubscribeEvent

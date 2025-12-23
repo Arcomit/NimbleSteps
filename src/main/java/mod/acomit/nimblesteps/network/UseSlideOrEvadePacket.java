@@ -41,7 +41,6 @@ public record UseSlideOrEvadePacket(float forwardImpulse, float leftImpulse) imp
                         SoundEvents.GENERIC_SMALL_FALL,
                         SoundSource.PLAYERS,
                         0.5f, 0.8f);
-
                 // 避免触发服务端反作弊回拉
                 if (player.connection != null) {
                     player.connection.resetPosition();

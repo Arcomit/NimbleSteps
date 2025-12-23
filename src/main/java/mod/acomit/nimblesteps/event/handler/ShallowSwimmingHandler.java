@@ -23,7 +23,7 @@ public class ShallowSwimmingHandler {
         if (!canShallowSwim(player)) return;
 
         if (player instanceof LocalPlayer localPlayer) {
-            if (Minecraft.getInstance().options.keySprint.isDown() || player.isSprinting()) {
+            if ((Minecraft.getInstance().options.keySprint.isDown() || player.isSprinting()) && localPlayer.hasEnoughFoodToStartSprinting()) {
                 localPlayer.setSprinting(true);
                 localPlayer.setSwimming(true);
             }

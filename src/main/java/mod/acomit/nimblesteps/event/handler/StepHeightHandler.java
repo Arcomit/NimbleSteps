@@ -17,7 +17,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
  * @Description: 可翻越的方块高度
  */
 @EventBusSubscriber(modid = NimbleStepsMod.MODID)
-public class StepAssistHandler {
+public class StepHeightHandler {
     private static final ResourceLocation WALK_STEP_HEIGHT_MODIFIER_ID = NimbleStepsMod.prefix("walk_step_height");
     private static final ResourceLocation SPRINT_STEP_HEIGHT_MODIFIER_ID = NimbleStepsMod.prefix("sprint_step_height");
 
@@ -32,7 +32,7 @@ public class StepAssistHandler {
         movementSpeed.removeModifier(WALK_STEP_HEIGHT_MODIFIER_ID);
         movementSpeed.removeModifier(SPRINT_STEP_HEIGHT_MODIFIER_ID);
 
-        if (player.isSprinting()) {
+        if (player.isSprinting() && !player.isSwimming()) {
             double sprintBonus = ServerConfig.sprinStepHeight - 0.6;
             AttributeModifier sprintModifier = new AttributeModifier(
                     SPRINT_STEP_HEIGHT_MODIFIER_ID,
